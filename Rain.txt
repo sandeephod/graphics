@@ -1,0 +1,65 @@
+#include <stdlib.h>
+#include <conio.h>
+#include <dos.h>
+#include <graphics.h>
+
+#define screenWidth getmaxx()
+#define screenHeight getmaxy()
+#define groundY screenHeight * 0.75
+
+void drawMan(int x, int legs_displacement) {
+    circle(x, groundY - 90, 10);
+    line(x, groundY - 80, x, groundY - 30);
+    line(x, groundY - 70, x + 15, groundY - 60);
+    line(x, groundY - 70, x - 15, groundY - 60);
+    line(x, groundY - 30, x + legs_displacement, groundY);
+    line(x, groundY - 30, x - legs_displacement, groundY);
+}
+
+void drawUmbrella(int x) {
+    pieslice(x + 15, groundY - 120, 0, 180, 40);
+    line(x + 15, groundY - 120, x + 15, groundY - 60);
+}
+
+void drawRain(int x) {
+    int i, rx, ry;
+    for (i = 0; i < 1000; i++) {
+        rx = rand() % screenWidth;
+        ry = rand() % screenHeight;
+        line(rx, ry, rx + 0.5, ry + 5);
+    }
+
+	rx = rand() % screenWidth;
+	ry = rand() % screenHeight;
+
+	if (ry + 5 < groundY) {
+    		if (ry < groundY - 120 || (ry > groundY - 120 && (rx < x - 20 || rx > x + 60))) 
+        	line(rx, ry, rx + 0.5, ry + 5);
+    		}
+	}
+
+
+
+
+void main() {
+    int gd = DETECT, gm, x = 0, legs_displacement = 0;
+    initgraph(&gd, &gm, "C://TURBOC3//BGI");
+
+    setbkcolor(WHITE);
+    setcolor(BLUE);
+
+    while (!kbhit()) {
+	line(0, groundY, screenWidth, groundY);
+
+	drawRain(x);
+	legs_displacement= (legs_displacement+2)%20;
+	drawMan(x, legs_displacement);
+	drawUmbrella(x);
+	delay(75);
+	cleardevice();
+	x=(x+2)%screenWidth;
+	}
+
+closegraph();
+getch();
+}
